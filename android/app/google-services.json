@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "994808752090",
+    "project_id": "fir-auth-ba253",
+    "storage_bucket": "fir-auth-ba253.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994808752090:android:6dcb38b6f4c367c23b02e3",
+        "android_client_info": {
+          "package_name": "com.example.firebase_kullanimi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTRJgrr_oQENi9la5Z7HA1YPEb-CqbW9U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
