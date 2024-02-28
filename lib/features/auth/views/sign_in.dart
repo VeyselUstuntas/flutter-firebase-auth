@@ -1,3 +1,4 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_kullanimi/common/colors.dart';
 import 'package:firebase_kullanimi/features/auth/views/sign_up.dart';
@@ -18,7 +19,19 @@ class _SignInState extends State<SignIn> {
   var tfPassword = TextEditingController();
   final formKey = GlobalKey<FormState>();
   var authService = AuthService();
+  late bool degisken;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    authService.firebaseAuth.authStateChanges().listen((User? user) {
+      if(user != null){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+       print(user.uid);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,20 +111,27 @@ class _SignInState extends State<SignIn> {
                               onPressed: () async {
                                 if(formKey.currentState!.validate()){
                                   formKey.currentState!.save();
-                                  try{
-                                    var state = authService.signInWithEmailAndPassword(tfEmail.text,tfPassword.text);
-                                    if(state != null){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) =>Home()));
-                                    }
-                                    else{
-                                      print("şifre yanlış");
-                                    }
-                                  }
-                                 on FirebaseAuthException catch(e){
-                                    print(e.toString());
+                                  final result = await authService.signIn(tfEmail.text, tfPassword.text);
+                                  if (result == "success") {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(builder: (context) => Home()),
+                                            (route) => false);
+                                  } else {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text("Hata"),
+                                            content: Text(result!),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () => Navigator.pop(context),
+                                                  child: Text("Geri Don"))
+                                            ],
+                                          );
+                                        });
                                   }
                                 }
-                                
                               },
                               color: loginButtonColor,
                               shape: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
@@ -121,6 +141,10 @@ class _SignInState extends State<SignIn> {
                       Container(
                         child: InkWell(
                             onTap: (){
+                              if(formKey.currentState!.validate()){
+                                formKey.currentState!.save();
+
+                              }
                                 
                             },
                             child: const Padding(

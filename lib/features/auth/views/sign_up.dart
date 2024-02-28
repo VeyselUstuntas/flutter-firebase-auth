@@ -100,10 +100,17 @@ class _SignUpState extends State<SignUp> {
                               if(formKey.currentState!.validate()){
                                 formKey.currentState!.save();
                                 try{
-                                  var userResult = auth.createUserWithEmailAndPassword(tfEmail.text, tfPassword.text);
+                                  final userResult = await auth.createUserWithEmailAndPassword(tfEmail.text, tfPassword.text);
+                                  if(userResult == "success"){
+                                    print(userResult);
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Kayıt Tamamlandı Giriş Ekranına Yönlendiriliyorsunuz")));
+                                    Navigator.pop(context);
+                                  }
+                                  else{
+                                    print(userResult);
+                                  }
                                   formKey.currentState!.reset();
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Kayıt Tamamlandı Giriş Ekranına Yönlendiriliyorsunuz")));
-                                  Navigator.pop(context);
+
                                 }
                                 catch(e){
                                   print(e.toString());
